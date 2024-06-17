@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\VacinaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,9 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::get('/teste', function(){
-    return response([
-      "mensagem" => "O sistema esta ON"
-    ], 200);
-  });
-  
+Route::get('/vacinas', [VacinaController::class, 'index']);
+
+// Route::post('/cars', [CarController::class, 'store'])->name('cars.store')->middleware(['auth']);
+Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');

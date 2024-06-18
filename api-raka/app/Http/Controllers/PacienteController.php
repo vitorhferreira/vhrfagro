@@ -15,7 +15,6 @@ class PacienteController extends Controller
     public function index()
     {
         $vacinas = Pacientes::get();
-
         return response()->json($vacinas);
     }
 

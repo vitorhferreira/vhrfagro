@@ -32,5 +32,5 @@ Route::post('/cadmedico', [MedicoController::class, 'store'])->name('medico.stor
 Route::get('/pacientes', [PacienteController::class, 'index']);
 Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
 
-// Route::get('/pacientes', [PacienteController::class, 'index']);
-// Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
+Route::get('/pacientes', [PacienteController::class, 'index']);
+Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');

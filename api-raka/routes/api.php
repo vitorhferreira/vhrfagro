@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\VacinaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,6 +24,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::get('/vacinas', [VacinaController::class, 'index']);
-
-// Route::post('/cars', [CarController::class, 'store'])->name('cars.store')->middleware(['auth']);
 Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
+
+Route::get('/medico', [MedicoController::class, 'index']);
+Route::post('/cadmedico', [MedicoController::class, 'store'])->name('medico.store');
+
+Route::get('/pacientes', [PacienteController::class, 'index']);
+Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
+
+// Route::get('/pacientes', [PacienteController::class, 'index']);
+// Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');

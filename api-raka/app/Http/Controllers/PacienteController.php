@@ -1,6 +1,6 @@
 <?php
-
 namespace App\Http\Controllers;
+
 
 use App\Models\Pacientes;
 use Illuminate\Http\Request;
@@ -16,6 +16,36 @@ class PacienteController extends Controller
     {
         $vacinas = Pacientes::get();
         return response()->json($vacinas);
+    }
+
+    public function login(Request $request)
+    {
+        echo 'aki';
+        die;
+        // Validação dos dados de entrada
+        $request->validate([
+            'cpf' => 'required|string|max:11',
+            'senha' => 'required|string|min:6',
+        ]);
+
+        // Tentar encontrar o usuário pelo CPF
+        $user = Pacientes::where('cpf', $request->cpf)->first();
+
+        // Verificar se o usuário existe e se a senha está correta
+        // if ($user && Hash::check($request->password, $user->password)) {
+        //     // Gerar um token de autenticação (exemplo usando Laravel Sanctum)
+        //     $token = $user->createToken('authToken')->plainTextToken;
+
+        //     return response()->json([
+        //         'message' => 'Login successful',
+        //         'token' => $token,
+        //     ]);
+        // }
+
+        // Retornar uma resposta de erro se a autenticação falhar
+        // throw ValidationException::withMessages([
+        //     'cpf' => ['The provided credentials are incorrect.'],
+        // ]);
     }
 
     /**

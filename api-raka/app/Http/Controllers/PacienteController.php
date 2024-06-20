@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 
@@ -20,32 +21,21 @@ class PacienteController extends Controller
 
     public function login(Request $request)
     {
-        echo 'aki';
-        die;
-        // Validação dos dados de entrada
-        $request->validate([
-            'cpf' => 'required|string|max:11',
-            'senha' => 'required|string|min:6',
-        ]);
 
-        // Tentar encontrar o usuário pelo CPF
-        $user = Pacientes::where('cpf', $request->cpf)->first();
+        $dados = $request->except('_token');
 
-        // Verificar se o usuário existe e se a senha está correta
-        // if ($user && Hash::check($request->password, $user->password)) {
-        //     // Gerar um token de autenticação (exemplo usando Laravel Sanctum)
-        //     $token = $user->createToken('authToken')->plainTextToken;
+        $paciente = Pacientes::where('cpf', $dados['cpf'])
+            ->where('senha', $dados['senha'])
+            ->first();
 
-        //     return response()->json([
-        //         'message' => 'Login successful',
-        //         'token' => $token,
-        //     ]);
-        // }
-
-        // Retornar uma resposta de erro se a autenticação falhar
-        // throw ValidationException::withMessages([
-        //     'cpf' => ['The provided credentials are incorrect.'],
-        // ]);
+        if ($paciente) {
+            // Paciente encontrado, faça o que for necessário (ex: autenticação)
+            // Exemplo: Autenticar o usuário, redirecionar, etc.
+            return response()->json(['message' => 'Login bem sucedido', 'paciente' => $paciente], 200);
+        } else {
+            // Paciente não encontrado
+            return response()->json(['message' => 'CPF ou senha inválidos'], 401);
+        }
     }
 
     /**

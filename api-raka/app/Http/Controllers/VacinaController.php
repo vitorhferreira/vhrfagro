@@ -14,8 +14,9 @@ class VacinaController extends Controller
      */
     public function index()
     {
+        // echo 'aki';
+        // die;
         $vacinas = Vacina::get();
-
         return response()->json($vacinas);
     }
 

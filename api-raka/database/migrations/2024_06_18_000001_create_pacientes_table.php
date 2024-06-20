@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('pacientes', function (Blueprint $table) {
             $table->id();
-            $table->string('cpf');
-            $table->string('nome');
-            $table->string('senha');
+            $table->string('cpf', 11)->unique();
+            $table->string('nome', 255);
+            $table->string('senha', 255);
             $table->integer('idade');
             $table->timestamps();
         });

@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('agendamentos', function (Blueprint $table) {
             $table->id();
-            $table->string('medico');
+            $table->string('cpf', 11);
+            $table->string('medico', 30);
             $table->date('data');
-            $table->text('local');
-            $table->timestamps();
+            $table->string('telefone', 11);
+            $table->time('hora');
+            $table->string('local', 255);
         });
     }
 

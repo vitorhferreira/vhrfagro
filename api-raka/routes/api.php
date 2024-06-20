@@ -40,4 +40,7 @@ Route::get('/agendamento', [AgendamentoController::class, 'index']);
 Route::post('/cadagendamento', [AgendamentoController::class, 'store'])->name('agendamento.store');
 
 
- Route::post('/login', [PacienteController::class, 'login']);
+ Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
+
+//  php artisan config:cache
+// php artisan route:cache

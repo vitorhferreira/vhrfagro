@@ -18,29 +18,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-    return $request->user();
-});
 
-// Route::post('/login', ['middleware' => 'cors', 'uses' => [PacienteController::class, 'login']]);
-// Route::middleware('cors')->get('/vacinas', [VacinaController::class, 'index']);
-// Route::middleware('cors')->post('/login', [PacienteController::class, 'login']);
-
+// vacinas
 Route::get('/vacinas', [VacinaController::class, 'index']);
 Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
 
+
+// medicos
 Route::get('/medico', [MedicoController::class, 'index']);
 Route::post('/cadmedico', [MedicoController::class, 'store'])->name('medico.store');
 
+
+// pacientes e login
 Route::get('/pacientes', [PacienteController::class, 'index']);
 Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
 
+Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
+
+Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
+
+Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
+
+// agendamentos
 Route::get('/agendamento', [AgendamentoController::class, 'index']);
 Route::post('/cadagendamento', [AgendamentoController::class, 'store'])->name('agendamento.store');
 
 
- Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
 
 //  php artisan config:cache
 // php artisan route:cache

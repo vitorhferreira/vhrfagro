@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Pacientes extends Model
 {
     use HasFactory;
+
+    protected $table = 'pacientes';
     protected $fillable = ['cpf','nome', 'senha', 'idade'];
 
 }

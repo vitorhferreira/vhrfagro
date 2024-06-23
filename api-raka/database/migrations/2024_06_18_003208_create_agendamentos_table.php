@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('telefone', 11);
             $table->time('hora');
             $table->string('local', 255);
+            $table->timestamps();
         });
     }
 

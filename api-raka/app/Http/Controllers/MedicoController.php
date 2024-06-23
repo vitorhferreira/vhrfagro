@@ -14,8 +14,8 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        $vacinas = Medico::get();
-        return response()->json($vacinas);
+        $medico = Medico::get();
+        return response()->json($medico);
     }
 
     /**
@@ -37,8 +37,9 @@ class MedicoController extends Controller
     public function store(Request $request)
     {
             $dados = $request->except('_token');
-            $vacina = Medico::create($dados);
-            return response()->json($vacina, 201);
+            $medico = Medico::create($dados);
+            // dd($medico);
+            return response()->json($medico, 200);
     }
 
     /**
@@ -72,7 +73,25 @@ class MedicoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            // Aqui vão as regras de validação, por exemplo:
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string',
+        ]);
+
+        // Encontrar o medico pelo ID
+        $medico = Medico::findOrFail($id);
+        // Atualizar os dados do paciente com base nos dados recebidos na requisição
+        $medico->update([
+            'nome' => $request->input('nome'),
+            'cpf' =>$request->input('cpf'),
+            'idade' => $request->input('idade'),
+            'profissao' => $request->input('profissao'),
+            // Adicione os outros campos que você precisa atualizar
+        ]);
+
+        // Retornar uma resposta de sucesso ou a representação atualizada do paciente
+        return response()->json($medico, 200);
     }
 
     /**
@@ -83,6 +102,18 @@ class MedicoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $medico = Medico::findOrFail($id);
+            // Deletar o medico
+            $medico->delete();
+            // Retornar uma resposta de sucesso
+            return response()->json(['message' => 'medico deletado com sucesso', 'sucesso' => true], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // medico não encontrado
+            return response()->json(['message' => 'medico não encontrado', 'sucesso' => false], 200);
+        } catch (\Exception $e) {
+            // Outros erros
+            return response()->json(['message' => 'Erro ao deletar medico', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+        }
     }
 }

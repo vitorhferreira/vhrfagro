@@ -26,27 +26,29 @@ use Illuminate\Support\Facades\Route;
 // vacinas
 Route::get('/vacinas', [VacinaController::class, 'index']);
 Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
-
+Route::delete('/vacinas/{id}', [VacinaController::class, 'destroy']);
+Route::put('/vacinas/{id}', [VacinaController::class, 'update']);
 
 // medicos
 Route::get('/medico', [MedicoController::class, 'index']);
 Route::post('/cadmedico', [MedicoController::class, 'store'])->name('medico.store');
+Route::put('/medico/{id}', [MedicoController::class, 'update']);
+Route::delete('/medico/{id}', [MedicoController::class, 'destroy']);
 
 
 // pacientes e login
 Route::get('/pacientes', [PacienteController::class, 'index']);
 Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
-
 Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
-
 Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
 
 Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
 
 // agendamentos
-Route::get('/agendamento', [AgendamentoController::class, 'index']);
-Route::post('/cadagendamento', [AgendamentoController::class, 'store'])->name('agendamento.store');
-
+Route::get('/agendamentos', [AgendamentoController::class, 'index']);
+Route::post('/cadagendamentos', [AgendamentoController::class, 'store'])->name('agendamento.store');
+Route::delete('/agendamentos/{id}', [AgendamentoController::class, 'destroy']);
+Route::put('/agendamentos/{id}', [AgendamentoController::class, 'update']);
 
 
 //  php artisan config:cache

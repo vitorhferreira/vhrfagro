@@ -140,10 +140,18 @@ class PacienteController extends Controller
      */
     public function destroy($id)
     {
-        $paciente = Pacientes::findOrFail($id);
-        // Deletar o paciente
-        $paciente->delete();
-        // Retornar uma resposta de sucesso
-        return response()->json(['message' => 'Paciente deletado com sucesso'], 200);
+        try {
+            $paciente = Pacientes::findOrFail($id);
+            // Deletar o paciente
+            $paciente->delete();
+            // Retornar uma resposta de sucesso
+            return response()->json(['message' => 'Paciente deletado com sucesso', 'sucesso' => true], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Paciente não encontrado
+            return response()->json(['message' => 'Paciente não encontrado', 'sucesso' => false], 200);
+        } catch (\Exception $e) {
+            // Outros erros
+            return response()->json(['message' => 'Erro ao deletar paciente', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+        }
     }
 }

@@ -91,6 +91,7 @@ class AgendamentoController extends Controller
             'telefone' =>$request->input('telefone'),
             'hora' =>$request->input('hora'),
             'local' =>$request->input('local'),
+            'diagnostico' =>$request->input('diagnostico'),
             // Adicione os outros campos que você precisa atualizar
         ]);
 

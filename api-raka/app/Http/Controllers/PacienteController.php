@@ -33,10 +33,10 @@ class PacienteController extends Controller
         if ($paciente) {
             // Paciente encontrado, faça o que for necessário (ex: autenticação)
             // Exemplo: Autenticar o usuário, redirecionar, etc.
-            return response()->json(['message' => 'Login bem sucedido', 'paciente' => $paciente], 200);
+            return response()->json(['message' => 'Login bem sucedido', 'success' => true, 'paciente' => $paciente], 200);
         } else {
             // Paciente não encontrado
-            return response()->json(['message' => 'CPF ou senha inválidos'], 401);
+            return response()->json(['message' => 'CPF ou senha inválidos', 'success' => false,], 401);
         }
     }
 
@@ -129,7 +129,7 @@ class PacienteController extends Controller
 
         // Retornar uma resposta de sucesso ou a representação atualizada do paciente
         return response()->json($paciente, 200);
-    
+
     }
 
     /**

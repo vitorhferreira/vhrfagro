@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 
 // vacinas
 Route::get('/vacinas', [VacinaController::class, 'index']);
+Route::get('/vacinas/{cpf}', [VacinaController::class, 'index1']);/*rota do android*/
 Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
 Route::delete('/vacinas/{id}', [VacinaController::class, 'destroy']);
 Route::put('/vacinas/{id}', [VacinaController::class, 'update']);
@@ -42,6 +43,7 @@ Route::get('/pacientes', [PacienteController::class, 'index']);
 Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
 Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
 Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
+Route::post('/loginpacientes', [PacienteController::class, 'login'])->name('paciente.login');
 
 // Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
 
@@ -51,6 +53,7 @@ Route::get('/agendamentos', [AgendamentoController::class, 'index']);
 Route::post('/cadagendamentos', [AgendamentoController::class, 'store'])->name('agendamento.store');
 Route::delete('/agendamentos/{id}', [AgendamentoController::class, 'destroy']);
 Route::put('/agendamentos/{id}', [AgendamentoController::class, 'update']);
+Route::get('/agendamentos/{cpf}', [AgendamentoController::class, 'index2']); /*rota do android*/
 
 // usuario
 Route::get('/user', [UsuarioController::class, 'index']);

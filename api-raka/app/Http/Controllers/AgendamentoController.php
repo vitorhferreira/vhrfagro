@@ -18,6 +18,20 @@ class AgendamentoController extends Controller
         return response()->json($medico);
     }
 
+    public function index2($cpf)/*index do android*/
+    {
+        // Busca os agendamentos associados ao CPF
+        $agendamentos = Agendamento::where('cpf', $cpf)->get();
+
+        // Verifica se foram encontrados agendamentos
+        if ($agendamentos->isEmpty()) {
+            return response()->json(['error' => 'Nenhum agendamento encontrado para este CPF'], 404);
+        }
+
+        // Retorna a lista de agendamentos como resposta JSON
+        return response()->json($agendamentos);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -42,7 +56,7 @@ class AgendamentoController extends Controller
             'data' => 'required|date|after_or_equal:today',
         ]);
         $agendamento = Agendamento::create($dados);
-        
+
 
         // data
         // dd($agendamemto);

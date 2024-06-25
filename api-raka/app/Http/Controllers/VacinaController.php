@@ -20,6 +20,19 @@ class VacinaController extends Controller
         return response()->json($vacinas);
     }
 
+    public function index1($cpf)/*index do android*/
+    {
+        // Busca as vacinas associadas ao CPF
+        $vacinas = Vacina::where('cpf', $cpf)->get();
+
+        // Verifica se as vacinas foram encontradas
+        if ($vacinas->isEmpty()) {
+            return response()->json(['error' => 'Nenhuma vacina encontrada para este CPF'], 404);
+        }
+
+        // Retorna a lista de vacinas como resposta JSON
+        return response()->json($vacinas);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -39,7 +52,7 @@ class VacinaController extends Controller
     public function store(Request $request)
     {
         $dados = $request->except('_token');
-    
+
         // print_r($dados);die;
         // $dados['dataproximadose'];
         // $dados['dataultimadose'];
@@ -134,7 +147,7 @@ class VacinaController extends Controller
         try {
             $vacina = Vacina::findOrFail($id);
             $vacina->delete();
-            
+
             return response()->json(['message' => 'Vacina deletado com sucesso', 'sucesso' => true], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Vacina não encontrado', 'sucesso' => false], 200);

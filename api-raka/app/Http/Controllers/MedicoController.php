@@ -37,8 +37,13 @@ class MedicoController extends Controller
     public function store(Request $request)
     {
             $dados = $request->except('_token');
+            $cpfLength = strlen($dados['cpf']);
+            if ($cpfLength !== 11) {
+                return response()->json(['error' => 'CPF deve ter 11 caracteres', 'sucesso' => 99], 200);
+            }
             $medico = Medico::create($dados);
             // dd($medico);
+           
             return response()->json($medico, 200);
     }
 

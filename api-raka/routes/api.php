@@ -3,6 +3,7 @@
 use App\Http\Controllers\AgendamentoController;
 use App\Http\Controllers\MedicoController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VacinaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,8 @@ Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('pacien
 Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
 Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
 
-Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
+// Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
+
 
 // agendamentos
 Route::get('/agendamentos', [AgendamentoController::class, 'index']);
@@ -50,6 +52,13 @@ Route::post('/cadagendamentos', [AgendamentoController::class, 'store'])->name('
 Route::delete('/agendamentos/{id}', [AgendamentoController::class, 'destroy']);
 Route::put('/agendamentos/{id}', [AgendamentoController::class, 'update']);
 
+// usuario
+Route::get('/user', [UsuarioController::class, 'index']);
+Route::post('/caduser', [UsuarioController::class, 'store'])->name('user.store');
+Route::delete('/user/{id}', [UsuarioController::class, 'destroy']);
+Route::put('/user/{id}', [UsuarioController::class, 'update']);
+
+Route::post('/login', [UsuarioController::class, 'login'])->name('login.login');
 
 //  php artisan config:cache
 // php artisan route:cache

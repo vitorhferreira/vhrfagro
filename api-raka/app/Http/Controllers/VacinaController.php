@@ -39,7 +39,18 @@ class VacinaController extends Controller
     public function store(Request $request)
     {
         $dados = $request->except('_token');
-    //    dd($dados);
+    
+        // print_r($dados);die;
+        // $dados['dataproximadose'];
+        // $dados['dataultimadose'];
+
+        $validatedData = $request->validate([
+            'cpf' => 'required|string|size:11',
+            'dataproximadose' => 'required|date|after_or_equal:dataultimadose',
+            'dataultimadose' => 'required|date|before_or_equal:today',
+            'descricao' => 'required|string',
+            'nomedavacina' => 'required|string',
+        ]);
 
         // Cria uma nova vacina com os dados validados
         $vacina = Vacina::create($dados);
@@ -79,11 +90,12 @@ class VacinaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            // Aqui vão as regras de validação, por exemplo:
-            'nomedavacina' => 'required|string|max:255',
-            'cpf' => 'required|string',
-            // Adicione as outras regras conforme necessário para os campos que você está atualizando
+        $validatedData = $request->validate([
+            'cpf' => 'required|string|size:11',
+            'dataproximadose' => 'required|date|after_or_equal:dataultimadose',
+            'dataultimadose' => 'required|date|before_or_equal:today',
+            'descricao' => 'required|string',
+            'nomedavacina' => 'required|string',
         ]);
 
         // Encontrar o paciente pelo ID

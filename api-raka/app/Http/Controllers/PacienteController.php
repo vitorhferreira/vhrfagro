@@ -17,8 +17,8 @@ class PacienteController extends Controller
      */
     public function index()
     {
-        $vacinas = Pacientes::get();
-        return response()->json($vacinas);
+        $paciente = Pacientes::get();
+        return response()->json($paciente);
     }
 
     public function login(Request $request)
@@ -56,11 +56,14 @@ class PacienteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-{
+    public function store(Request $request){
+
     try {
         $dados = $request->except('_token');
-        // print_r($dados);
+         $cpfLength = strlen($dados['cpf']);
+            if ($cpfLength !== 11) {
+                return response()->json(['error' => 'CPF deve ter 11 caracteres', 'sucesso' => 99], 200);
+            }
         $pacientes = Pacientes::create($dados);
         return response()->json($pacientes, 201);
     } catch (\Illuminate\Database\QueryException $e) {

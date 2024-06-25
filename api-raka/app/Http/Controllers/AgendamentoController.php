@@ -37,7 +37,14 @@ class AgendamentoController extends Controller
     public function store(Request $request)
     {
         $dados = $request->except('_token');
+
+        $validatedData = $request->validate([
+            'data' => 'required|date|after_or_equal:today',
+        ]);
         $agendamento = Agendamento::create($dados);
+        
+
+        // data
         // dd($agendamemto);
         return response()->json($agendamento, 200);
     }

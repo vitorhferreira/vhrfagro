@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('cpf', 11)->unique();
             $table->string('nome', 255);
             $table->string('senha', 255);
-            $table->integer('idade');
+            $table->date('nascimento');
             $table->timestamps();
         });
     }

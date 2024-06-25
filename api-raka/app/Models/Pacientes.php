@@ -10,6 +10,6 @@ class Pacientes extends Model
     use HasFactory;
 
     protected $table = 'pacientes';
-    protected $fillable = ['cpf','nome', 'senha', 'idade'];
+    protected $fillable = ['cpf','nome', 'senha', 'nascimento'];
 
 }

@@ -112,7 +112,7 @@ class PacienteController extends Controller
         $request->validate([
             // Aqui vão as regras de validação, por exemplo:
             'nome' => 'required|string|max:255',
-            'idade' => 'required|integer',
+            'nascimento' => 'required|date',
             // Adicione as outras regras conforme necessário para os campos que você está atualizando
         ]);
 
@@ -123,7 +123,7 @@ class PacienteController extends Controller
         $paciente->update([
             'nome' => $request->input('nome'),
             'cpf' =>$request->input('cpf'),
-            'idade' => $request->input('idade'),
+            'nascimento' => $request->input('nascimento'),
             // Adicione os outros campos que você precisa atualizar
         ]);
 

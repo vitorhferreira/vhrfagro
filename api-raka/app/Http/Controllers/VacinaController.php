@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Vacina;
 use Illuminate\Http\Request;
 
-class VacinaController extends Controller
+class vacinaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,25 +14,24 @@ class VacinaController extends Controller
      */
     public function index()
     {
-        // echo 'aki';
-        // die;
-        $vacinas = Vacina::get();
-        return response()->json($vacinas);
+        $medico = vacina::get();
+        return response()->json($medico);
     }
 
-    public function index1($cpf)/*index do android*/
+    public function index2($cpf)/*index do android*/
     {
-        // Busca as vacinas associadas ao CPF
-        $vacinas = Vacina::where('cpf', $cpf)->get();
+        // Busca os vacinas associados ao CPF
+        $vacinas = vacina::where('numero_lote', $cpf)->get();
 
-        // Verifica se as vacinas foram encontradas
+        // Verifica se foram encontrados vacinas
         if ($vacinas->isEmpty()) {
-            return response()->json(['error' => 'Nenhuma vacina encontrada para este CPF'], 404);
+            return response()->json(['error' => 'Nenhuma vacina encontrada'], 404);
         }
 
         // Retorna a lista de vacinas como resposta JSON
         return response()->json($vacinas);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -53,23 +52,14 @@ class VacinaController extends Controller
     {
         $dados = $request->except('_token');
 
-        // print_r($dados);die;
-        // $dados['dataproximadose'];
-        // $dados['dataultimadose'];
+       /* $validatedData = $request->validate([
+            'data_aplicacao' => 'required|date|after_or_equal:today',
+        ]);*/
+        $vacina = vacina::create($dados);
 
-        $validatedData = $request->validate([
-            'cpf' => 'required|string|size:11',
-            'dataproximadose' => 'required|date|after_or_equal:dataultimadose',
-            'dataultimadose' => 'required|date|before_or_equal:today',
-            'descricao' => 'required|string',
-            'nomedavacina' => 'required|string',
-        ]);
-
-        // Cria uma nova vacina com os dados validados
-        $vacina = Vacina::create($dados);
-
-        // Retorna a vacina recém-criada em formato JSON
-        return response()->json($vacina, 201);
+        // data
+        // dd($agendamemto);
+        return response()->json($vacina, 200);
     }
 
     /**
@@ -101,33 +91,29 @@ class VacinaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'cpf' => 'required|string|size:11',
-            'dataproximadose' => 'required|date|after_or_equal:dataultimadose',
-            'dataultimadose' => 'required|date|before_or_equal:today',
-            'descricao' => 'required|string',
-            'nomedavacina' => 'required|string',
+        $request->validate([
+            // Aqui vão as regras de validação, por exemplo:
+
         ]);
 
-        // Encontrar o paciente pelo ID
+        // Encontrar o lote pelo ID
         $vacina = Vacina::findOrFail($id);
-
         // Atualizar os dados do paciente com base nos dados recebidos na requisição
         $vacina->update([
-            'nomedavacina' => $request->input('nomedavacina'),
-            'cpf' =>$request->input('cpf'),
-            'descricao' => $request->input('descricao'),
-            'idade' => $request->input('idade'),
-            'dataultimadose' => $request->input('dataultimadose'),
-            'dataproximadose' => $request->input('dataproximadose'),
+            'nome_vacina' => $request->input('nome_vacina'),
+            'data_aplicacao' =>$request->input('data_aplicacao'),
+            'numero_lote' =>$request->input('numero_lote'),
+            'quantidade_cabecas' =>$request->input('quantidade_cabecas'),
             // Adicione os outros campos que você precisa atualizar
         ]);
 
         // Retornar uma resposta de sucesso ou a representação atualizada do paciente
         return response()->json($vacina, 200);
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -137,22 +123,18 @@ class VacinaController extends Controller
      */
     public function destroy($id)
     {
-        // $vacina = Vacina::findOrFail($id);
-        // // Deletar o paciente
-        // $vacina->delete();
-        // Retornar uma resposta de sucesso
-        // return response()->json(['message' => 'Vacina deletado com sucesso'], 200);
-
-
         try {
-            $vacina = Vacina::findOrFail($id);
+            $vacina = vacina::findOrFail($id);
+            // Deletar o vacina
             $vacina->delete();
-
-            return response()->json(['message' => 'Vacina deletado com sucesso', 'sucesso' => true], 200);
+            // Retornar uma resposta de sucesso
+            return response()->json(['message' => 'vacina deletada com sucesso', 'sucesso' => true], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            return response()->json(['message' => 'Vacina não encontrado', 'sucesso' => false], 200);
+            // vacina não encontrado
+            return response()->json(['message' => 'vacina não encontrada', 'sucesso' => false], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Erro ao deletar Vacina', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+            // Outros erros
+            return response()->json(['message' => 'Erro ao deletar vacina', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
         }
     }
 }

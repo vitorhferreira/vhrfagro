@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Medico;
+use App\Models\Lote;
 use Illuminate\Http\Request;
 
-class MedicoController extends Controller
+class LoteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,8 +14,8 @@ class MedicoController extends Controller
      */
     public function index()
     {
-        $medico = Medico::get();
-        return response()->json($medico);
+        $lote = Lote::get();
+        return response()->json($lote);
     }
 
     /**
@@ -37,14 +37,11 @@ class MedicoController extends Controller
     public function store(Request $request)
     {
             $dados = $request->except('_token');
-            $cpfLength = strlen($dados['cpf']);
-            if ($cpfLength !== 11) {
-                return response()->json(['error' => 'CPF deve ter 11 caracteres', 'sucesso' => 99], 200);
-            }
-            $medico = Medico::create($dados);
-            // dd($medico);
-           
-            return response()->json($medico, 200);
+
+            $lote = Lote::create($dados);
+            // dd($lote);
+
+            return response()->json($lote, 200);
     }
 
     /**
@@ -80,23 +77,24 @@ class MedicoController extends Controller
     {
         $request->validate([
             // Aqui vão as regras de validação, por exemplo:
-            'nome' => 'required|string|max:255',
-            'cpf' => 'required|string',
+
         ]);
 
-        // Encontrar o medico pelo ID
-        $medico = Medico::findOrFail($id);
+        // Encontrar o lote pelo ID
+        $lote = Lote::findOrFail($id);
         // Atualizar os dados do paciente com base nos dados recebidos na requisição
-        $medico->update([
-            'nome' => $request->input('nome'),
-            'cpf' =>$request->input('cpf'),
-            'idade' => $request->input('idade'),
-            'profissao' => $request->input('profissao'),
+        $lote->update([
+            'quantidade' => $request->input('quantidade'),
+            'peso' =>$request->input('peso'),
+            'valor_individual' => $request->input('valor_individual'),
+            'idade_media' => $request->input('idade_media'),
+            'data_compra' => $request->input('data_compra'),
+            'numero_lote' => $request->input('numero_lote'),
             // Adicione os outros campos que você precisa atualizar
         ]);
 
         // Retornar uma resposta de sucesso ou a representação atualizada do paciente
-        return response()->json($medico, 200);
+        return response()->json($lote, 200);
     }
 
     /**
@@ -108,17 +106,17 @@ class MedicoController extends Controller
     public function destroy($id)
     {
         try {
-            $medico = Medico::findOrFail($id);
-            // Deletar o medico
-            $medico->delete();
+            $lote = Lote::findOrFail($id);
+            // Deletar olote
+            $lote->delete();
             // Retornar uma resposta de sucesso
-            return response()->json(['message' => 'medico deletado com sucesso', 'sucesso' => true], 200);
+            return response()->json(['message' => 'lote deletado com sucesso', 'sucesso' => true], 200);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            // medico não encontrado
-            return response()->json(['message' => 'medico não encontrado', 'sucesso' => false], 200);
+            // lote não encontrado
+            return response()->json(['message' => 'lote não encontrado', 'sucesso' => false], 200);
         } catch (\Exception $e) {
             // Outros erros
-            return response()->json(['message' => 'Erro ao deletar medico', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Erro ao deletar lote', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
         }
     }
 }

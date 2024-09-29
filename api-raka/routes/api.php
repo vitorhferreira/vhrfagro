@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\AgendamentoController;
-use App\Http\Controllers\MedicoController;
+use App\Http\Controllers\vacinaController;
+use App\Http\Controllers\loteController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\VacinaController;
+use App\Http\Controllers\gastovetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,18 +24,18 @@ use Illuminate\Support\Facades\Route;
 // });
 
 
-// vacinas
-Route::get('/vacinas', [VacinaController::class, 'index']);
-Route::get('/vacinas/{cpf}', [VacinaController::class, 'index1']);/*rota do android*/
-Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
-Route::delete('/vacinas/{id}', [VacinaController::class, 'destroy']);
-Route::put('/vacinas/{id}', [VacinaController::class, 'update']);
+// gastovets
+Route::get('/gastovets', [GastovetController::class, 'index']);
+Route::get('/gastovets/{id}', [GastovetController::class, 'index1']);/*rota do android*/
+Route::post('/cadgastovets', [GastovetController::class, 'store'])->name('gastovets.store');
+Route::delete('/gastovets/{id}', [GastovetController::class, 'destroy']);
+Route::put('/gastovets/{id}', [GastovetController::class, 'update']);
 
-// medicos
-Route::get('/medico', [MedicoController::class, 'index']);
-Route::post('/cadmedico', [MedicoController::class, 'store'])->name('medico.store');
-Route::put('/medico/{id}', [MedicoController::class, 'update']);
-Route::delete('/medico/{id}', [MedicoController::class, 'destroy']);
+// lotes
+Route::get('/lote', [LoteController::class, 'index']);
+Route::post('/cadlote', [LoteController::class, 'store'])->name('lote.store');
+Route::put('/lote/{id}', [LoteController::class, 'update']);
+Route::delete('/lote/{id}', [LoteController::class, 'destroy']);
 
 
 // pacientes e login
@@ -48,12 +48,12 @@ Route::post('/loginpacientes', [PacienteController::class, 'login'])->name('paci
 // Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
 
 
-// agendamentos
-Route::get('/agendamentos', [AgendamentoController::class, 'index']);
-Route::post('/cadagendamentos', [AgendamentoController::class, 'store'])->name('agendamento.store');
-Route::delete('/agendamentos/{id}', [AgendamentoController::class, 'destroy']);
-Route::put('/agendamentos/{id}', [AgendamentoController::class, 'update']);
-Route::get('/agendamentos/{cpf}', [AgendamentoController::class, 'index2']); /*rota do android*/
+// vacinas
+Route::get('/vacinas', [VacinaController::class, 'index']);
+Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
+Route::delete('/vacinas/{id}', [VacinaController::class, 'destroy']);
+Route::put('/vacinas/{id}', [VacinaController::class, 'update']);
+Route::get('/vacinas/{cpf}', [VacinaController::class, 'index2']); /*rota do android*/
 
 // usuario
 Route::get('/user', [UsuarioController::class, 'index']);

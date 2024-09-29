@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Agendamento extends Model
+class Gastovet extends Model
 {
     use HasFactory;
-    protected $fillable = ['cpf','medico', 'data', 'telefone', 'hora', 'local','diagnostico'];
+    protected $fillable = ['motivo_gasto', 'qtd_cabecas', 'data_pagamento', 'valor' , 'lote'];
 }

@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\ConsumoRacaoController;
 use App\Http\Controllers\vacinaController;
 use App\Http\Controllers\loteController;
-use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\UsuarioController;
+use App\Http\Controllers\VendasController;
 use App\Http\Controllers\gastovetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +25,19 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
+// Rotas para relatorio
+Route::get('/relatorio', [RelatorioController::class, 'index']);
+Route::get('/relatorio/{lote_id}', [RelatorioController::class, 'show']);
+Route::post('/relatorio', [RelatorioController::class, 'store'])->name('relatorio.store');
+Route::delete('/relatorio/{id}', [RelatorioController::class, 'destroy']);
+Route::put('/relatorio/{id}', [RelatorioController::class, 'update']);
+
+Route::get('/vendas', [VendasController::class, 'index']);
+Route::get('/vendas/{id}', [VendasController::class, 'show']);
+Route::post('/vendas', [VendasController::class, 'store']);
+Route::put('/vendas/{id}', [VendasController::class, 'update']);
+Route::delete('/vendas/{id}', [VendasController::class, 'destroy']);
+Route::get('/vendas/{id}/lucro', [VendasController::class, 'calcularLucro']);
 
 // gastovets
 Route::get('/gastovets', [GastovetController::class, 'index']);
@@ -39,11 +54,11 @@ Route::delete('/lote/{id}', [LoteController::class, 'destroy']);
 
 
 // pacientes e login
-Route::get('/pacientes', [PacienteController::class, 'index']);
-Route::post('/cadpacientes', [PacienteController::class, 'store'])->name('paciente.store');
-Route::delete('/pacientes/{id}', [PacienteController::class, 'destroy']);
-Route::put('/pacientes/{id}', [PacienteController::class, 'update']);
-Route::post('/loginpacientes', [PacienteController::class, 'login'])->name('paciente.login');
+Route::get('/consumo_racao', [ConsumoRacaoController::class, 'index']);
+Route::post('/cadconsumo_racao', [ConsumoRacaoController::class, 'store'])->name('consumoracao.store');
+Route::delete('/consumo_racao/{id}', [ConsumoRacaoController::class, 'destroy']);
+Route::put('/consumo_racao/{id}', [ConsumoRacaoController::class, 'update']);
+
 
 // Route::post('/login', [PacienteController::class, 'login'])->name('login.login');
 
@@ -55,6 +70,14 @@ Route::delete('/vacinas/{id}', [VacinaController::class, 'destroy']);
 Route::put('/vacinas/{id}', [VacinaController::class, 'update']);
 Route::get('/vacinas/{cpf}', [VacinaController::class, 'index2']); /*rota do android*/
 
+// Rotas para Relatórios
+Route::get('/relatorios', [RelatorioController::class, 'index']); // Listar todas as vendas
+Route::get('/relatorios/{id}', [RelatorioController::class, 'show']); // Exibir uma venda específica por ID
+Route::post('/relatorios', [RelatorioController::class, 'store'])->name('relatorios.store'); // Criar uma nova venda e atualizar o relatório
+Route::put('/relatorios/{id}', [RelatorioController::class, 'update']); // Atualizar uma venda existente e o relatório
+Route::delete('/relatorios/{id}', [RelatorioController::class, 'destroy']); // Remover uma venda e atualizar o relatório
+Route::get('/relatorios/lucro/{vendaId}', [RelatorioController::class, 'calcularLucro']); // Calcular o lucro de uma venda específica
+
 // usuario
 Route::get('/user', [UsuarioController::class, 'index']);
 Route::post('/caduser', [UsuarioController::class, 'store'])->name('user.store');
@@ -62,6 +85,11 @@ Route::delete('/user/{id}', [UsuarioController::class, 'destroy']);
 Route::put('/user/{id}', [UsuarioController::class, 'update']);
 
 Route::post('/login', [UsuarioController::class, 'login'])->name('login.login');
+
+//email
+Route::post('/solicitar-redefinicao-senha', [UsuarioController::class, 'solicitarRedefinicaoSenha']);
+Route::post('/redefinir-senha', [UsuarioController::class, 'redefinirSenha']);
+
 
 //  php artisan config:cache
 // php artisan route:cache

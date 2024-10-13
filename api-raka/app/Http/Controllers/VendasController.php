@@ -24,6 +24,36 @@ class VendasController extends Controller
         return response()->json($vendas, 200);
     }
 
+    public function marcarComoRecebido($id)
+    {
+        try {
+            $venda = Vendas::findOrFail($id);
+            $venda->recebido = true; // Marca a venda como recebida
+            $venda->save();
+
+            return response()->json(['message' => 'Venda marcada como recebida com sucesso', 'sucesso' => true], 200);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['message' => 'Venda não encontrada', 'sucesso' => false], 404);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao marcar venda como recebida', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+        }
+    }
+
+    public function marcarComoNaoRecebido($id)
+       {
+           try {
+                $venda = Vendas::findOrFail($id);
+                $venda->recebido = false; // Marca a venda como não recebida
+                $venda->save();
+
+               return response()->json(['message' => 'Venda marcada como não recebida com sucesso', 'sucesso' => true], 200);
+           } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+               return response()->json(['message' => 'Venda não encontrada', 'sucesso' => false], 404);
+           } catch (\Exception $e) {
+               return response()->json(['message' => 'Erro ao marcar venda como não recebida', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+           }
+       }
+
     /**
      * Exibe uma venda específica por ID.
      *
@@ -113,18 +143,23 @@ class VendasController extends Controller
      */
     public function destroy($id)
     {
-        // Buscar a venda pelo ID
+        // Encontrar a venda
         $venda = Vendas::find($id);
-
         if (!$venda) {
             return response()->json(['error' => 'Venda não encontrada'], 404);
         }
 
-        // Deletar a venda
+        // Restaurar a quantidade no lote
+        $lote = Lote::find($venda->lote_id);
+        if ($lote) {
+            $lote->quantidade += $venda->quantidade_vendida;
+            $lote->save();
+        }
+
+        // Excluir a venda
         $venda->delete();
 
-        // Retornar uma resposta de sucesso
-        return response()->json(['message' => 'Venda deletada com sucesso'], 200);
+        return response()->json(['message' => 'Venda excluída com sucesso e quantidade restaurada no lote'], 200);
     }
 
     /**

@@ -73,6 +73,55 @@ class LoteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+     public function restoreQuantidade(Request $request, $id)
+        {
+            // Validar a entrada
+            $validatedData = $request->validate([
+                'quantidade' => 'required|integer|min:1',
+            ]);
+
+            // Buscar o lote
+            $lote = Lote::find($id);
+            if (!$lote) {
+                return response()->json(['error' => 'Lote não encontrado'], 404);
+            }
+
+            // Restaurar a quantidade do lote
+            $lote->quantidade += $validatedData['quantidade'];
+            $lote->save();
+
+            return response()->json(['message' => 'Quantidade restaurada com sucesso no lote'], 200);
+        }
+
+
+     public function update2(Request $request, $id)
+     {
+         // Validar a entrada
+         $validatedData = $request->validate([
+             'quantidade' => 'required|integer|min:0',
+         ]);
+
+         // Buscar o lote
+         $lote = Lote::find($id);
+         if (!$lote) {
+             return response()->json(['error' => 'Lote não encontrado'], 404);
+         }
+
+         // Atualizar a quantidade
+         $lote->quantidade = $validatedData['quantidade'];
+
+         // Verifica se o lote chegou a zero e pode ser inativado ou excluído
+         /*if ($lote->quantidade === 0) {
+             $lote->status = 'inativo'; // Caso tenha uma coluna 'status'
+         }*/
+
+         $lote->save();
+
+         return response()->json(['message' => 'Lote atualizado com sucesso'], 200);
+     }
+
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -120,3 +169,5 @@ class LoteController extends Controller
         }
     }
 }
+
+

@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Gastovet extends Model
 {
     use HasFactory;
-    protected $fillable = ['motivo_gasto', 'qtd_cabecas', 'data_pagamento', 'valor' , 'lote'];
+    protected $fillable = ['motivo_gasto', 'qtd_cabecas', 'data_pagamento', 'valor' , 'lote', 'pago'];
 }

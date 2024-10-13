@@ -38,6 +38,8 @@ Route::post('/vendas', [VendasController::class, 'store']);
 Route::put('/vendas/{id}', [VendasController::class, 'update']);
 Route::delete('/vendas/{id}', [VendasController::class, 'destroy']);
 Route::get('/vendas/{id}/lucro', [VendasController::class, 'calcularLucro']);
+Route::put('/vendas/{id}/recebido', [VendasController::class, 'marcarComoRecebido'])->name('gastovets.marcarComoRecebido');
+Route::put('/vendas/{id}/naorecebido', [VendasController::class, 'marcarComoNaoRecebido']);
 
 // gastovets
 Route::get('/gastovets', [GastovetController::class, 'index']);
@@ -45,12 +47,18 @@ Route::get('/gastovets/{id}', [GastovetController::class, 'index1']);/*rota do a
 Route::post('/cadgastovets', [GastovetController::class, 'store'])->name('gastovets.store');
 Route::delete('/gastovets/{id}', [GastovetController::class, 'destroy']);
 Route::put('/gastovets/{id}', [GastovetController::class, 'update']);
+Route::put('/gastovets/{id}/pago', [GastovetController::class, 'marcarComoPago'])->name('gastovets.marcarComoPago');
+Route::put('/gastovets/{id}/naopago', [GastovetController::class, 'marcarComoNaoPago']);
+
+
 
 // lotes
 Route::get('/lote', [LoteController::class, 'index']);
 Route::post('/cadlote', [LoteController::class, 'store'])->name('lote.store');
 Route::put('/lote/{id}', [LoteController::class, 'update']);
 Route::delete('/lote/{id}', [LoteController::class, 'destroy']);
+Route::put('/lotes/{id}/quantidade', [LoteController::class, 'update2']);
+Route::put('/lotes/{id}/restore-quantidade', [LoteController::class, 'restoreQuantidade']);
 
 
 // pacientes e login
@@ -83,6 +91,7 @@ Route::get('/user', [UsuarioController::class, 'index']);
 Route::post('/caduser', [UsuarioController::class, 'store'])->name('user.store');
 Route::delete('/user/{id}', [UsuarioController::class, 'destroy']);
 Route::put('/user/{id}', [UsuarioController::class, 'update']);
+Route::post('/verificarUsuario', [UsuarioController::class, 'verificarUsuario']);
 
 Route::post('/login', [UsuarioController::class, 'login'])->name('login.login');
 

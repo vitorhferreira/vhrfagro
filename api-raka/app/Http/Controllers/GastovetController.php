@@ -49,6 +49,37 @@ class GastovetController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     public function marcarComoPago($id)
+     {
+         try {
+             $gasto = Gastovet::findOrFail($id);
+             $gasto->pago = true; // Marca o gasto como pago
+             $gasto->save();
+
+             return response()->json(['message' => 'Gasto marcado como pago com sucesso', 'sucesso' => true], 200);
+         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+             return response()->json(['message' => 'Gasto não encontrado', 'sucesso' => false], 404);
+         } catch (\Exception $e) {
+             return response()->json(['message' => 'Erro ao marcar gasto como pago', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+         }
+     }
+
+     public function marcarComoNaoPago($id)
+        {
+            try {
+                $gasto = Gastovet::findOrFail($id);
+                $gasto->pago = false; // Marca o gasto como não pago
+                $gasto->save();
+
+                return response()->json(['message' => 'Gasto marcado como não pago com sucesso', 'sucesso' => true], 200);
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                return response()->json(['message' => 'Gasto não encontrado', 'sucesso' => false], 404);
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'Erro ao marcar gasto como não pago', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+            }
+        }
+
     public function store(Request $request)
     {
         {

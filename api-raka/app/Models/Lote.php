@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class Lote extends Model
 {
     use HasFactory;
-    protected $fillable = ['quantidade','peso', 'valor_individual', 'idade_media', 'data_compra', 'numero_lote'];
+    protected $fillable = ['quantidade','peso', 'valor_individual', 'idade_media', 'data_compra', 'numero_lote', 'documento'];
 }

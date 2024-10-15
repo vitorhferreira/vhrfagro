@@ -25,6 +25,23 @@ class UsuarioController extends Controller
         return response()->json($users);
     }
 
+        /**
+     * Excluir tokens de redefinição de senha que expiraram (mais de 30 minutos).
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function limparTokensExpirados()
+    {
+        // Define o tempo limite de expiração dos tokens (30 minutos)
+        $tempoExpiracao = Carbon::now()->subMinutes(30);
+
+        // Deletar todos os tokens que foram criados há mais de 30 minutos
+        PasswordReset::where('created_at', '<', $tempoExpiracao)->delete();
+
+        return response()->json(['message' => 'Tokens expirados excluídos com sucesso']);
+    }
+
+
     /**
      * Solicitar redefinição de senha.
      *

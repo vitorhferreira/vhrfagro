@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Vendas;
 use App\Models\Lote;
 use App\Models\Gastovet;
-use App\Models\Vacina;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class VendasController extends Controller
 {
@@ -91,15 +91,32 @@ class VendasController extends Controller
             'quantidade_vendida' => 'required|integer',
             'prazo_pagamento' => 'nullable|string|max:50',
             'data_compra' => 'required|date',
+            'documento' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        // Criar uma nova venda com os dados validados
-        $venda = Vendas::create($validatedData);
+        // Criar a venda
+        $venda = new Vendas($validatedData);
 
-        // Retornar a venda criada como resposta JSON
+        // Verifica se foi enviado um documento
+        if ($request->hasFile('documento')) {
+            $documentoPath = $request->file('documento')->store('documentos_vendas', 'public');
+            $venda->documento = $documentoPath;
+        }
+
+        $venda->save();
+
+        // Atualizar a quantidade do lote
+        $lote = Lote::findOrFail($request->lote_id);
+        if ($lote->quantidade < $validatedData['quantidade_vendida']) {
+            return response()->json(['error' => 'A quantidade vendida excede a quantidade disponível no lote'], 400);
+        }
+
+        // Subtrair a quantidade vendida
+        $lote->quantidade -= $validatedData['quantidade_vendida'];
+        $lote->save();
+
         return response()->json($venda, 201);
     }
-
     /**
      * Atualiza uma venda existente.
      *
@@ -110,11 +127,7 @@ class VendasController extends Controller
     public function update(Request $request, $id)
     {
         // Buscar a venda pelo ID
-        $venda = Vendas::find($id);
-
-        if (!$venda) {
-            return response()->json(['error' => 'Venda não encontrada'], 404);
-        }
+        $venda = Vendas::findOrFail($id);
 
         // Validação dos dados da requisição
         $validatedData = $request->validate([
@@ -126,21 +139,38 @@ class VendasController extends Controller
             'quantidade_vendida' => 'required|integer',
             'prazo_pagamento' => 'nullable|string|max:50',
             'data_compra' => 'required|date',
+            'documento' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
-        // Atualizar a venda com os dados validados
+        // Verifica se a quantidade do lote é suficiente para a atualização
+        $lote = Lote::findOrFail($request->lote_id);
+        $diferenca_quantidade = $validatedData['quantidade_vendida'] - $venda->quantidade_vendida;
+
+        if ($lote->quantidade < $diferenca_quantidade) {
+            return response()->json(['error' => 'A quantidade vendida excede a quantidade disponível no lote'], 400);
+        }
+
+        // Atualizar os dados da venda
         $venda->update($validatedData);
 
-        // Retornar a venda atualizada como resposta JSON
+        // Verifica se foi enviado um novo documento e armazena
+        if ($request->hasFile('documento')) {
+            // Exclui o documento anterior, se existir
+            if ($venda->documento) {
+                Storage::disk('public')->delete($venda->documento);
+            }
+
+            // Armazena o novo documento
+            $documentoPath = $request->file('documento')->store('documentos_vendas', 'public');
+            $venda->documento = $documentoPath;
+        }
+
+        // Ajustar a quantidade no lote
+        $lote->quantidade -= $diferenca_quantidade;
+        $lote->save();
+
         return response()->json($venda, 200);
     }
-
-    /**
-     * Remove uma venda.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         // Encontrar a venda
@@ -154,6 +184,11 @@ class VendasController extends Controller
         if ($lote) {
             $lote->quantidade += $venda->quantidade_vendida;
             $lote->save();
+        }
+
+        // Excluir o documento associado, se existir
+        if ($venda->documento) {
+            Storage::disk('public')->delete($venda->documento);
         }
 
         // Excluir a venda

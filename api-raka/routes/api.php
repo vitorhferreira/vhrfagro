@@ -50,12 +50,12 @@ Route::put('/gastovets/{id}', [GastovetController::class, 'update']);
 Route::put('/gastovets/{id}/pago', [GastovetController::class, 'marcarComoPago'])->name('gastovets.marcarComoPago');
 Route::put('/gastovets/{id}/naopago', [GastovetController::class, 'marcarComoNaoPago']);
 
-
+Route::delete('/limpar-tokens-expirados', [UsuarioController::class, 'limparTokensExpirados']);
 
 // lotes
 Route::get('/lote', [LoteController::class, 'index']);
 Route::post('/cadlote', [LoteController::class, 'store'])->name('lote.store');
-Route::put('/lote/{id}', [LoteController::class, 'update']);
+Route::post('/lote/{id}', [LoteController::class, 'update']);
 Route::delete('/lote/{id}', [LoteController::class, 'destroy']);
 Route::put('/lotes/{id}/quantidade', [LoteController::class, 'update2']);
 Route::put('/lotes/{id}/restore-quantidade', [LoteController::class, 'restoreQuantidade']);

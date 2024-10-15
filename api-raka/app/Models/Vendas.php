@@ -19,6 +19,7 @@ class Vendas extends Model
         'quantidade_vendida',    // Quantidade vendida
         'prazo_pagamento',       // Prazo de pagamento
         'data_compra',           // Data da compra
+        'documento',
     ];
 
     // Definindo a relação entre a venda e o lote

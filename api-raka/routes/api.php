@@ -9,6 +9,7 @@ use App\Http\Controllers\VendasController;
 use App\Http\Controllers\gastovetController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IndividualController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +62,16 @@ Route::put('/lotes/{id}/quantidade', [LoteController::class, 'update2']);
 Route::put('/lotes/{id}/restore-quantidade', [LoteController::class, 'restoreQuantidade']);
 
 
+//controle individual
+Route::get('/animal', [IndividualController::class, 'index']);
+Route::get('/animal/{numero_identificacao}', [IndividualController::class, 'show']);
+Route::get('/animal/historico/{numero_identificacao}', [IndividualController::class, 'historicoPeso']);
+Route::post('/animal', [IndividualController::class, 'store']);
+Route::put('/animal/{numero_identificacao}', [IndividualController::class, 'update']);
+Route::get('/animal/ultimos-registros', [IndividualController::class, 'ultimosRegistros']);
+Route::delete('/animal/{id}', [IndividualController::class, 'destroy']);
+
+
 // pacientes e login
 Route::get('/consumo_racao', [ConsumoRacaoController::class, 'index']);
 Route::post('/cadconsumo_racao', [ConsumoRacaoController::class, 'store'])->name('consumoracao.store');
@@ -87,6 +98,7 @@ Route::delete('/relatorios/{id}', [RelatorioController::class, 'destroy']); // R
 Route::get('/relatorios/lucro/{vendaId}', [RelatorioController::class, 'calcularLucro']); // Calcular o lucro de uma venda específica
 
 // usuario
+Route::get('/verificar-usuario', [UsuarioController::class, 'verificarUsuario']);
 Route::get('/user', [UsuarioController::class, 'index']);
 Route::post('/caduser', [UsuarioController::class, 'store'])->name('user.store');
 Route::delete('/user/{id}', [UsuarioController::class, 'destroy']);

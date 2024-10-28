@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Helpers\ValidaCPFCNPJ;
 use App\Models\PasswordReset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -153,34 +154,55 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        try {
-            $dados = $request->only(['nome', 'cpf', 'email', 'senha']);
+{
+    try {
+        $dados = $request->only(['nome', 'cpf', 'email', 'senha']);
 
-            // Validação do CPF e email
-            $request->validate([
-                'nome' => 'required|string|max:255',
-                'cpf' => 'required|string|size:11|unique:users',
-                'email' => 'required|email|unique:users',
-                'senha' => 'required|string|min:6',
-            ]);
+        // Validação básica do CPF, email e outros campos
+        $request->validate([
+            'nome' => 'required|string|max:255',
+            'cpf' => 'required|string|unique:users', // Verificação se o CPF já está cadastrado
+            'email' => 'required|email|unique:users',
+            'senha' => 'required|string|min:6',
+        ]);
 
-            // Criptografar a senha antes de armazenar
-            $dados['senha'] = Hash::make($dados['senha']);
+        // Validação de CPF/CNPJ utilizando a classe ValidaCPFCNPJ
+        $validaCpfCnpj = new ValidaCPFCNPJ($dados['cpf']);
 
-            // Cadastrar o usuário no banco de dados
-            $user = User::create($dados);
-
-            return response()->json($user, 201);
-        } catch (\Illuminate\Database\QueryException $e) {
-            // Exceção por chave única violada
-            if ($e->errorInfo[1] == 1062) {
-                return response()->json(['error' => 'CPF ou email já cadastrados'], 400);
-            }
-
-            return response()->json(['error' => 'Erro de banco de dados'], 500);
+        // Se o CPF for inválido, retorne um erro de validação
+        if (!$validaCpfCnpj->valida()) {
+            return response()->json([
+                'error' => 'CPF/CNPJ inválido'
+            ], 422); // Status 422: Unprocessable Entity
         }
+
+        // Criptografar a senha antes de armazenar
+        $dados['senha'] = Hash::make($dados['senha']);
+
+        // Cadastrar o usuário no banco de dados
+        $user = User::create($dados);
+
+        return response()->json($user, 201);
+    } catch (\Illuminate\Database\QueryException $e) {
+        // Exceção por chave única violada (CPF ou email já cadastrados)
+        if ($e->errorInfo[1] == 1062) {
+            // Pega a mensagem de erro e identifica se o conflito foi no CPF ou no email
+            $errorMessage = $e->errorInfo[2];
+            $cpfExistente = str_contains($errorMessage, 'cpf');
+            $emailExistente = str_contains($errorMessage, 'email');
+
+            // CPF ou email já cadastrados
+            return response()->json([
+                'error' => 'Conflito de dados',
+                'cpfExistente' => $cpfExistente,
+                'emailExistente' => $emailExistente
+            ], 409); // HTTP 409: Conflito
+        }
+
+        return response()->json(['error' => 'Erro de banco de dados'], 500);
     }
+}
+
 
     /**
      * Atualizar os dados de um usuário.

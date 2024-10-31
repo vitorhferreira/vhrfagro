@@ -47,6 +47,7 @@ class LoteController extends Controller
             'valor_individual' => 'required|numeric|min:1',
             'idade_media' => 'required|integer|min:1',
             'data_compra' => 'required|date',
+            'data_pagamento' => 'required|date',
             'numero_lote' => 'required|integer|unique:lotes,numero_lote',
             'documento' => 'nullable|file|mimes:pdf,doc,docx|max:2048', // Documento opcional
         ]);
@@ -59,6 +60,7 @@ class LoteController extends Controller
         $lote->idade_media = $request->idade_media;
         $lote->data_compra = $request->data_compra;
         $lote->numero_lote = $request->numero_lote;
+        $lote->data_pagamento = $request->data_pagamento;
 
         // Verifica se foi enviado um arquivo de documento
         if ($request->hasFile('documento')) {
@@ -151,6 +153,35 @@ class LoteController extends Controller
          return response()->json(['message' => 'Lote atualizado com sucesso'], 200);
      }
 
+     public function marcarComoPago($id)
+     {
+         try {
+             $gasto = Lote::findOrFail($id);
+             $gasto->pago = true; // Marca o gasto como pago
+             $gasto->save();
+
+             return response()->json(['message' => 'Lote marcado como pago com sucesso', 'sucesso' => true], 200);
+         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+             return response()->json(['message' => 'Lote não encontrado', 'sucesso' => false], 404);
+         } catch (\Exception $e) {
+             return response()->json(['message' => 'Erro ao marcar lote como pago', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+         }
+     }
+
+     public function marcarComoNaoPago($id)
+        {
+            try {
+                $gasto = Lote::findOrFail($id);
+                $gasto->pago = false; // Marca o gasto como não pago
+                $gasto->save();
+
+                return response()->json(['message' => 'Lote marcado como não pago com sucesso', 'sucesso' => true], 200);
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                return response()->json(['message' => 'Lote não encontrado', 'sucesso' => false], 404);
+            } catch (\Exception $e) {
+                return response()->json(['message' => 'Erro ao marcar lote como não pago', 'sucesso' => false, 'erro' => $e->getMessage()], 500);
+            }
+        }
 
 // Função para atualizar lote existente
 public function update(Request $request, $id)
@@ -169,6 +200,7 @@ public function update(Request $request, $id)
         'valor_individual' => $request->input('valor_individual'),
         'idade_media' => $request->input('idade_media'),
         'data_compra' => $request->input('data_compra'),
+        'data_pagamento' => $request->input('data_pagamento'),
         'numero_lote' => $request->input('numero_lote'),
 
     ]);

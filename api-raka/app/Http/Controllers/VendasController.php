@@ -7,6 +7,7 @@ use App\Models\Lote;
 use App\Models\Gastovet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\ValidaCPFCNPJ;
 
 class VendasController extends Controller
 {
@@ -94,6 +95,14 @@ class VendasController extends Controller
             'documento' => 'nullable|file|mimes:pdf,doc,docx|max:2048',
         ]);
 
+        // Validação de CPF/CNPJ utilizando a classe ValidaCPFCNPJ
+        $validaCpfCnpj = new ValidaCPFCNPJ($validatedData['cpf_cnpj_comprador']);
+        if (!$validaCpfCnpj->valida()) {
+            return response()->json([
+                'error' => 'CPF/CNPJ do comprador inválido'
+            ], 422); // Status 422: Unprocessable Entity
+        }
+
         // Criar a venda
         $venda = new Vendas($validatedData);
 
@@ -117,6 +126,7 @@ class VendasController extends Controller
 
         return response()->json($venda, 201);
     }
+
     /**
      * Atualiza uma venda existente.
      *

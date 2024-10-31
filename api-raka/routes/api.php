@@ -60,7 +60,8 @@ Route::post('/lote/{id}', [LoteController::class, 'update']);
 Route::delete('/lote/{id}', [LoteController::class, 'destroy']);
 Route::put('/lotes/{id}/quantidade', [LoteController::class, 'update2']);
 Route::put('/lotes/{id}/restore-quantidade', [LoteController::class, 'restoreQuantidade']);
-
+Route::put('/lotes/{id}/pago', [LoteController::class, 'marcarComoPago'])->name('lotes.marcarComoPago');
+Route::put('/lotes/{id}/naopago', [LoteController::class, 'marcarComoNaoPago']);
 
 //controle individual
 Route::get('/animal', [IndividualController::class, 'index']);

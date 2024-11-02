@@ -88,7 +88,6 @@ Route::get('/vacinas', [VacinaController::class, 'index']);
 Route::post('/cadvacinas', [VacinaController::class, 'store'])->name('vacina.store');
 Route::delete('/vacinas/{id}', [VacinaController::class, 'destroy']);
 Route::put('/vacinas/{id}', [VacinaController::class, 'update']);
-Route::get('/vacinas/{cpf}', [VacinaController::class, 'index2']); /*rota do android*/
 
 // Rotas para Relatórios
 Route::get('/relatorios', [RelatorioController::class, 'index']); // Listar todas as vendas
@@ -105,6 +104,7 @@ Route::post('/caduser', [UsuarioController::class, 'store'])->name('user.store')
 Route::delete('/user/{id}', [UsuarioController::class, 'destroy']);
 Route::put('/user/{id}', [UsuarioController::class, 'update']);
 Route::post('/verificarUsuario', [UsuarioController::class, 'verificarUsuario']);
+Route::get('user/{id}', [UsuarioController::class, 'show']);
 
 Route::post('/login', [UsuarioController::class, 'login'])->name('login.login');
 

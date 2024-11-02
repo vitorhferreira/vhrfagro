@@ -50,16 +50,28 @@ class vacinaController extends Controller
      */
     public function store(Request $request)
     {
+        // Exclui o token CSRF e armazena todos os outros dados da requisição
         $dados = $request->except('_token');
 
-       /* $validatedData = $request->validate([
-            'data_aplicacao' => 'required|date|after_or_equal:today',
-        ]);*/
-        $vacina = vacina::create($dados);
+        // Verifica o conteúdo dos dados recebidos para garantir que `numero_identificacao` esteja presente
+        if (!array_key_exists('numero_identificacao', $dados)) {
+            return response()->json(['error' => 'Campo numero_identificacao é obrigatório.'], 400);
+        }
 
-        // data
-        // dd($agendamemto);
-        return response()->json($vacina, 200);
+        // Exibe os dados recebidos para verificar se estão corretos (opcional para depuração)
+        // dd($dados);
+
+        try {
+            // Cria o registro no banco de dados
+            $vacina = vacina::create($dados);
+
+            // Retorna a resposta com o registro criado
+            return response()->json($vacina, 200);
+
+        } catch (\Exception $e) {
+            // Retorna uma mensagem de erro se houver uma exceção
+            return response()->json(['error' => 'Erro ao salvar a vacina: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -107,6 +119,7 @@ class vacinaController extends Controller
             'data_aplicacao' =>$request->input('data_aplicacao'),
             'numero_lote' =>$request->input('numero_lote'),
             'quantidade_cabecas' =>$request->input('quantidade_cabecas'),
+            'numero_identificacao' =>$request->input('numero_identificacao'),
             // Adicione os outros campos que você precisa atualizar
         ]);
 

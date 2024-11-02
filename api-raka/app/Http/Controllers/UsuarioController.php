@@ -22,7 +22,7 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $users = User::select('id', 'nome', 'cpf', 'email')->get(); // Excluir campo 'senha'
+        $users = User::select('id', 'nome', 'cpf', 'email', 'tipo_usuario')->get(); // Excluir campo 'senha'
         return response()->json($users);
     }
 
@@ -139,8 +139,15 @@ class UsuarioController extends Controller
         $user = User::where('cpf', $dados['cpf'])->first();
 
         if ($user && Hash::check($dados['senha'], $user->senha)) {
-            // Login bem-sucedido
-            return response()->json(['message' => 'Login bem sucedido', 'user' => $user], 200);
+            // Login bem-sucedido, retorna o ID e tipo de usuário
+            return response()->json([
+                'message' => 'Login bem sucedido',
+                'user' => [
+                    'id' => $user->id,
+                    'nome' => $user->nome,
+                    'tipo_usuario' => $user->tipo_usuario
+                ]
+            ], 200);
         } else {
             // CPF ou senha inválidos
             return response()->json(['message' => 'CPF ou senha inválidos'], 401);
@@ -153,16 +160,30 @@ class UsuarioController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+     public function show($id)
+{
+    try {
+        // Busca o usuário pelo ID, omitindo a senha
+        $user = User::select('id', 'nome', 'cpf', 'email', 'tipo_usuario')->findOrFail($id);
+
+        return response()->json($user, 200);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Usuário não encontrado', 'erro' => $e->getMessage()], 404);
+    }
+}
+
     public function store(Request $request)
 {
     try {
-        $dados = $request->only(['nome', 'cpf', 'email', 'senha']);
+        $dados = $request->only(['nome', 'cpf', 'email', 'tipo_usuario', 'senha']);
 
         // Validação básica do CPF, email e outros campos
         $request->validate([
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|unique:users', // Verificação se o CPF já está cadastrado
             'email' => 'required|email|unique:users',
+            'tipo_usuario' => 'required|string|unique:users',
             'senha' => 'required|string|min:6',
         ]);
 
@@ -217,6 +238,7 @@ class UsuarioController extends Controller
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|size:11',
             'email' => 'required|string|email|max:255',
+            'tipo_usuario' => 'required|string|max:255',
         ]);
 
         try {

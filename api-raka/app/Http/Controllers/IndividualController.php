@@ -9,23 +9,23 @@ use Illuminate\Support\Facades\DB;
 
 class IndividualController extends Controller
 {
-    // Listar todos os animais
-    public function index()
-    {
-        $animais = Individual::all();
-        return response()->json($animais, 200);
-    }
-
-    public function show($numero_identificacao)
-    {
-        $animal = Individual::where('numero_identificacao', $numero_identificacao)->orderBy('data', 'desc')->first();
-
-        if ($animal) {
-            return response()->json($animal, 200);
-        } else {
-            return response()->json(['error' => 'Animal não encontrado'], 404);
+        // Listar todos os animais
+        public function index()
+        {
+            $animais = Individual::all();
+            return response()->json($animais, 200);
         }
-    }
+
+        public function show($numero_identificacao)
+        {
+            $animal = Individual::where('numero_identificacao', $numero_identificacao)->orderBy('data', 'desc')->first();
+
+            if ($animal) {
+                return response()->json($animal, 200);
+            } else {
+                return response()->json(['error' => 'Animal não encontrado'], 404);
+            }
+        }
 
     // Histórico de peso do animal
     public function historicoPeso($numero_identificacao)

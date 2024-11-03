@@ -183,7 +183,7 @@ class UsuarioController extends Controller
             'nome' => 'required|string|max:255',
             'cpf' => 'required|string|unique:users', // Verificação se o CPF já está cadastrado
             'email' => 'required|email|unique:users',
-            'tipo_usuario' => 'required|string|unique:users',
+            'tipo_usuario' => 'required|string', // Remova a unicidade deste campo
             'senha' => 'required|string|min:6',
         ]);
 

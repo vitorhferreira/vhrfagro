@@ -17,11 +17,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // Roda a cada hora, por exemplo
-        $schedule->call(function () {
-        // Chama a função de limpar tokens expirados
-        app('App\Http\Controllers\UsuarioController')->limparTokensExpirados();
-        })->hourly();
+        $schedule->command('password_resets:clean')->everyFiveMinutes();
     }
 
     /**
@@ -35,6 +31,8 @@ class Kernel extends ConsoleKernel
 
         require base_path('routes/console.php');
     }
+
+
 }
 
 

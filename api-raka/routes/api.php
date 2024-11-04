@@ -7,6 +7,7 @@ use App\Http\Controllers\RelatorioController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\VendasController;
 use App\Http\Controllers\gastovetController;
+use App\Http\Controllers\AlimentacaoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\IndividualController;
@@ -32,6 +33,8 @@ Route::get('/relatorio/{lote_id}', [RelatorioController::class, 'show']);
 Route::post('/relatorio', [RelatorioController::class, 'store'])->name('relatorio.store');
 Route::delete('/relatorio/{id}', [RelatorioController::class, 'destroy']);
 Route::put('/relatorio/{id}', [RelatorioController::class, 'update']);
+
+Route::get('/alimentacao_ideal/{peso}', [AlimentacaoController::class, 'recomendacaoAlimentacao']);
 
 Route::get('/vendas', [VendasController::class, 'index']);
 Route::get('/vendas/{id}', [VendasController::class, 'show']);

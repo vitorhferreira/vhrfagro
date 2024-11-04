@@ -34,7 +34,8 @@ Route::post('/relatorio', [RelatorioController::class, 'store'])->name('relatori
 Route::delete('/relatorio/{id}', [RelatorioController::class, 'destroy']);
 Route::put('/relatorio/{id}', [RelatorioController::class, 'update']);
 
-Route::get('/alimentacao_ideal/{peso}', [AlimentacaoController::class, 'recomendacaoAlimentacao']);
+// Rotas para api
+Route::get('/alimentacao_ideal/{peso}/{idade}/{raca}/{pastagem}/{clima}', [AlimentacaoController::class, 'recomendacaoAlimentacao']);
 
 Route::get('/vendas', [VendasController::class, 'index']);
 Route::get('/vendas/{id}', [VendasController::class, 'show']);
@@ -65,6 +66,7 @@ Route::put('/lotes/{id}/quantidade', [LoteController::class, 'update2']);
 Route::put('/lotes/{id}/restore-quantidade', [LoteController::class, 'restoreQuantidade']);
 Route::put('/lotes/{id}/pago', [LoteController::class, 'marcarComoPago'])->name('lotes.marcarComoPago');
 Route::put('/lotes/{id}/naopago', [LoteController::class, 'marcarComoNaoPago']);
+Route::get('/lote/custo-por-cabeca', [LoteController::class, 'calcularCustoPorCabeca']);
 
 //controle individual
 Route::get('/animal', [IndividualController::class, 'index']);

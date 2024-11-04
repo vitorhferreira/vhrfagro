@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lote;
+use App\Models\GastoVet;
+use App\Models\Vendas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -36,6 +38,34 @@ class LoteController extends Controller
      * @return \Illuminate\Http\Response
      */
 
+
+     public function calcularCustoPorCabeca()
+    {
+        $lotes = Lote::all();
+
+        $result = $lotes->map(function ($lote) {
+            // Pega os gastos relacionados ao lote
+            $gastos = GastoVet::where('lote', $lote->numero_lote)->get();
+            $totalGastos = $gastos->sum('valor');
+
+            // Pega as vendas relacionadas ao lote
+            $vendas = Vendas::where('lote_id', $lote->id)->get();
+            $quantidadeVendida = $vendas->sum('quantidade_vendida');
+
+            // Quantidade total de cabeças para o cálculo
+            $quantidadeTotal = $lote->quantidade + $quantidadeVendida;
+
+            // Calcula o custo por cabeça
+            $custoPorCabeca = ($lote->valor_individual + ($totalGastos / $quantidadeTotal));
+
+            return [
+                'numero_lote' => $lote->numero_lote,
+                'custo_por_cabeca' => round($custoPorCabeca, 2),
+            ];
+        });
+
+        return response()->json($result);
+    }
 
     // Função para cadastrar novo lote
     public function store(Request $request)

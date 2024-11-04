@@ -13,6 +13,7 @@ class CreateConsumoRacaoTable extends Migration
             $table->string('tipo_racao', 100);
             $table->decimal('quantidade_kg', 10, 2);
             $table->decimal('valor_estimado', 10, 2);
+            $table->decimal('numero_lote', 10, 2);
             $table->date('data_inicial');
             $table->date('data_final');
             $table->timestamps();

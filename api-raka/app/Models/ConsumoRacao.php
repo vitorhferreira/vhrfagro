@@ -16,6 +16,7 @@ class ConsumoRacao extends Model
         'tipo_racao',      // Tipo de ração consumida
         'quantidade_kg',   // Quantidade de ração em kg
         'valor_estimado',  // Valor estimado da ração
+        'numero_lote',
         'data_inicial',    // Data inicial do consumo
         'data_final',      // Data final do consumo
     ];

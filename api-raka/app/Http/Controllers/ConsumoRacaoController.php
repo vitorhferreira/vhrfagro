@@ -82,6 +82,7 @@ class ConsumoRacaoController extends Controller
             'tipo_racao' => $request->input('tipo_racao'),
             'quantidade_kg' =>$request->input('quantidade_kg'),
             'valor_estimado' =>$request->input('valor_estimado'),
+            'numero_lote' =>$request->input('numero_lote'),
             'data_inicial' =>$request->input('data_inicial'),
             'data_final' =>$request->input('data_final'),
             // Adicione os outros campos que você precisa atualizar

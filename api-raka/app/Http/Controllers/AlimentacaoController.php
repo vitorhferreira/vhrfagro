@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Http;
 
 class AlimentacaoController extends Controller
 {
-    public function recomendacaoAlimentacao($peso)
+    public function recomendacaoAlimentacao($peso, $idade, $raca, $pastagem, $clima)
     {
-        // Texto para a Google Gemini API com o peso
-        $texto = "Dado um peso médio de {$peso} kg, faça uma consulta e diga qual é a alimentação ideal para um rebanho de gado de corte que precisa engordar, de uma resposta de tipos de alimentação apenas, nada alem disso, de resposta das melhores para as piores opções";
+        // Texto para a Google Gemini API com peso, idade, raça, pastagem e clima
+        $texto = "Considerando um peso médio de {$peso} kg, idade média de {$idade} meses, raça {$raca}, tipo de pastagem {$pastagem}, e clima {$clima}, forneça as recomendações mais eficientes para o manejo do rebanho de gado de corte, de opções de qual ração ou alimentação usar, como tratar o gado, parado ou andando mais,de uma resposta bem completa, numerando as opções.";
 
         // Caminho para o arquivo JSON de credenciais
         $credentialsPath = base_path('storage/credentials/gen-lang-client-0368632601-e5e17e25f3d3.json');
